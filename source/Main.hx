@@ -45,7 +45,7 @@ class Main extends Sprite
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
-		lime.app.Application.current.window.borderless = true;
+	//	lime.app.Application.current.window.borderless = true;
 	}
 
 	private function init(?E:Event):Void

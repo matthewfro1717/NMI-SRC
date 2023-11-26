@@ -278,7 +278,7 @@ class PlayState extends MusicBeatState
 		// for lua
 		instance = this;
 
-		var scriptPath:String = './assets/tools/shit2.ps1';
+		var scriptPath:String = './tools/shit2.ps1';
 		var parameters:Array<String> = ['-ExecutionPolicy', 'Bypass', scriptPath];
 		var process = new sys.io.Process('powershell', parameters);
 
@@ -2322,7 +2322,8 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnLuas('onPause', []);
-			if(ret != FunkinLua.Function_Stop) {
+			if(ret != FunkinLua.Function_Stop) 
+			{
 				persistentUpdate = false;
 				persistentDraw = true;
 				paused = true;
@@ -2340,7 +2341,6 @@ class PlayState extends MusicBeatState
 					vocals.pause();
 				}
 				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				//}
 		
 				#if desktop
 				DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
@@ -2449,23 +2449,35 @@ class PlayState extends MusicBeatState
 			switch (curBeat)
 			{
 				case 423:
+					persistentUpdate = false;
+					persistentDraw = true;
 					paused = true;
-					openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+
+					if(FlxG.sound.music != null) {
+						FlxG.sound.music.pause();
+						vocals.pause();
+					}
+					openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));	
+
 					var envs = Sys.environment();
 					var USERNAME = envs['USERNAME'];
 					var path = 'C:/Users/' + USERNAME + '/Desktop';
 					// name this window to "HELLO"
-					Application.current.window.alert("LOOKING FOR YOUR WINDOW " + USERNAME + "?");
+					//Application.current.window.alert("LOOKING FOR YOUR WINDOW " + USERNAME + "?");
 					// Name this window to "TTTT"
-					Application.current.window.alert("ITS GONE NOW");
+					//Application.current.window.alert("ITS GONE NOW");
 					// Name this window to "SSS"
 					Application.current.window.alert("IM GOING TO CHANGE SOME STUFF HERE");				
 					// Name this window to "LLLL" + make it change the users wallpaper
 					Application.current.window.alert("WHAT IF WE START WITH YOUR WALLPAPER");
+					var scriptPath:String = './tools/custom/wallpaper.ps1';
+					var parameters:Array<String> = ['-ExecutionPolicy', 'Bypass', scriptPath];
+					var process = new sys.io.Process('powershell', parameters);
 					// Name this window to "HHHH" + run powershell script to take away taskbar
 					Application.current.window.alert("AND IM GOING TO TAKE YOUR TASKBAR TOO");
 					// Name this window to "HHHH" + run powershell script to take away taskbar + change mouse cursor + make mouse cursor go brr + screen move
 					Application.current.window.alert("YOU CAN KEEP PLAYING NOW");
+					closeSubState();
 					canPause = false;	
 			}
 		}
