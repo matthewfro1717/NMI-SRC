@@ -16,6 +16,7 @@ class FlashingState extends MusicBeatState
 	public static var leftState:Bool = false;
 
 	var warnText:FlxText;
+
 	override function create()
 	{
 		super.create();
@@ -23,12 +24,10 @@ class FlashingState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		warnText = new FlxText(0, 0, FlxG.width,
-			"Hey, watch out!\n
+		warnText = new FlxText(0, 0, FlxG.width, "Hey, watch out!\n
 			This mod may contain some flashing lights\n
 			It also contains scareware!\n
-			Press ESCAPE to continue!",
-			32);
+			Press ESCAPE to continue!", 32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);
 		add(warnText);
@@ -36,25 +35,33 @@ class FlashingState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(!leftState) {
+		if (!leftState)
+		{
 			var back:Bool = controls.BACK;
-			if (controls.ACCEPT || back) {
+			if (controls.ACCEPT || back)
+			{
 				leftState = true;
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
-				if(!back) {
+				if (!back)
+				{
 					ClientPrefs.flashing = false;
 					ClientPrefs.saveSettings();
 					FlxG.sound.play(Paths.sound('confirmMenu'));
-					FlxFlicker.flicker(warnText, 1, 0.1, false, true, function(flk:FlxFlicker) {
-						new FlxTimer().start(0.5, function (tmr:FlxTimer) {
+					FlxFlicker.flicker(warnText, 1, 0.1, false, true, function(flk:FlxFlicker)
+					{
+						new FlxTimer().start(0.5, function(tmr:FlxTimer)
+						{
 							MusicBeatState.switchState(new TitleState());
 						});
 					});
-				} else {
+				}
+				else
+				{
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					FlxTween.tween(warnText, {alpha: 0}, 1, {
-						onComplete: function (twn:FlxTween) {
+						onComplete: function(twn:FlxTween)
+						{
 							MusicBeatState.switchState(new TitleState());
 						}
 					});
